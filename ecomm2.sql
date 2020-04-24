@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2019 at 10:12 AM
+-- Generation Time: Apr 24, 2020 at 06:31 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -46,17 +46,68 @@ INSERT INTO `admin` (`id`, `nama`, `username`, `password`, `email`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `cart`
+--
+
+CREATE TABLE `cart` (
+  `cartID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `prodID` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `qty` int(11) NOT NULL,
+  `note` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `cart`
+--
+
+INSERT INTO `cart` (`cartID`, `userID`, `prodID`, `name`, `price`, `qty`, `note`) VALUES
+(1, 1, 1, 'AMD Ryzen 9 3900X 3.8Ghz Up To 4.6Ghz Cache 64MB 105W AM4 [Box]', 7779000, 4, 'langsung kirim'),
+(2, 1, 2, 'Intel Pentium G4560 3.5Ghz - Cache 3MB [Tray] Socket LGA 1151 - Kabylake Series', 810000, 3, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kategori`
+--
+
+CREATE TABLE `kategori` (
+  `id` int(11) NOT NULL,
+  `namaktg` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`id`, `namaktg`) VALUES
+(4, 'prosesor');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `produk`
 --
 
 CREATE TABLE `produk` (
   `id` int(11) NOT NULL,
-  `poto` text NOT NULL,
+  `poto` text NOT NULL DEFAULT 'default.jpg',
   `namaprod` varchar(255) NOT NULL,
   `deskprod` text NOT NULL,
   `hargabrg` int(11) NOT NULL,
-  `jumlahbrg` int(11) NOT NULL
+  `jumlahbrg` int(11) NOT NULL,
+  `kategori` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `produk`
+--
+
+INSERT INTO `produk` (`id`, `poto`, `namaprod`, `deskprod`, `hargabrg`, `jumlahbrg`, `kategori`) VALUES
+(1, '10AMD Ryzen 9 3900X 3.8Ghz Up To 4.6Ghz Cache 64MB 105W AM4 [Box].png', 'AMD Ryzen 9 3900X 3.8Ghz Up To 4.6Ghz Cache 64MB 105W AM4 [Box]', 'Ryzen 9 3900X is a 64-bit dodeca-core high-end performance x86 desktop microprocessor introduced by AMD in mid-2019. Fabricated on TSMC&#39;s 7 nm process based on the Zen 2 microarchitecture, this processor operates at 3.8 GHz with a TDP of 105 W and a Boost frequency of up to 4.6 GHz. The 3900X supports up to 128 GiB of dual-channel DDR4-3200 memory.', 7779000, 200, 4),
+(2, '15Intel Pentium G4560 3.5Ghz - Cache 3MB [Tray] Socket LGA 1151 - Kabylake Series.jpg', 'Intel Pentium G4560 3.5Ghz - Cache 3MB [Tray] Socket LGA 1151 - Kabylake Series', 'Nama Pentium adalah nama yang sangat lekat dengan brand Intel. Mulai sebagai penamaan prosesor flagship dari Intel, hingga tergusur sebagai prosesor “kelas dua” ketika diperkenalkannya Core dan Core i series, Pentium tetap identik dengan perusahaan prosesor asal Santa Clara ini.', 810000, 100, 4);
 
 -- --------------------------------------------------------
 
@@ -93,10 +144,23 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `cart`
+--
+ALTER TABLE `cart`
+  ADD PRIMARY KEY (`cartID`);
+
+--
+-- Indexes for table `kategori`
+--
+ALTER TABLE `kategori`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `produk`
 --
 ALTER TABLE `produk`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `kategori` (`kategori`);
 
 --
 -- Indexes for table `users`
@@ -109,22 +173,38 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `admin`
+-- AUTO_INCREMENT for table `cart`
 --
-ALTER TABLE `admin`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+ALTER TABLE `cart`
+  MODIFY `cartID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `kategori`
+--
+ALTER TABLE `kategori`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `produk`
+--
+ALTER TABLE `produk`
+  ADD CONSTRAINT `produk_ibfk_1` FOREIGN KEY (`kategori`) REFERENCES `kategori` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
